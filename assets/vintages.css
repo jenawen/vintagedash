@@ -1,0 +1,48 @@
+body {
+  font-family: sans-serif;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;
+}
+
+.sidebar {
+  width: 20%;
+  padding: 20px;
+  background-color: #d9d9d9;
+  height: 100vh;
+  display: inline-block;
+  position: fixed;
+}
+
+.vintage {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;
+  margin: auto;
+}
+
+select {
+  width: 100%;
+}
+
+button {
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #fff;
+}
+
+button:hover {
+  background-color: pink;
+  cursor: pointer;
+}
