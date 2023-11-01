@@ -51,6 +51,11 @@ def generate_table(dataframe, max_rows=10):
 app.layout = html.Div(className = 'wrapper', children=[
     
 html.Div(className = "sidebar", children=[
+    
+    
+    html.Div(className="sidebar-contents", children=[
+        
+        
     html.Label(children='Selected Vintages:'),
     dcc.Dropdown(id="selected-vintages", options=[], value=[]),
     html.Label(children='First Second'),
@@ -68,6 +73,7 @@ html.Div(className = "sidebar", children=[
     html.Label(children='Original Credit Line Range'),
     dcc.Dropdown(id='ogcredrange',options=clist7),
     html.Button('Submit', id='submit-btn', n_clicks=0)
+        ]),
     ]),    
 
     
@@ -75,21 +81,22 @@ html.Div(className = "sidebar", children=[
     html.Div( id="filters"),
     
     dcc.Dropdown(
-            id='vintages',
-            options=[{'label':i, 'value':i} for i in clist],
-            multi=True,
-            value=None
-        ),
-    
-    dash_table.DataTable(
-    data=df.to_dict('records'),
-    columns=[{'id': c, 'name': c} for c in df.columns],
-    page_size=10,
-     style_table={'overflowX': 'auto'},
-),
-    
+        id='vintages',
+        options=[{'label':i, 'value':i} for i in clist],
+        multi=True,
+        value=None,
+        className='main-dd'
+    ),
     
     ##*CONDITIONAL RENDERING: graph values are based off Submit and Add buttons !! need to make a switch statement of some sort ??
+    
+    html.Div(id='df-table', children={
+        
+
+    }),
+    
+            
+
     
     dcc.Graph(id='fig1', figure=fig1),
     dcc.Graph(id='fig2', figure=fig2),
@@ -111,7 +118,7 @@ def setSelectedVintages(vintages):
      return vintages
 
 @app.callback(
-    Output('filters', 'children'),
+    Output('df-table', 'children'),
     Input('submit-btn', 'n_clicks'),
     Input('selected-vintages', 'value'),
     Input('first-second', 'value'),
@@ -122,10 +129,10 @@ def setSelectedVintages(vintages):
     Input('annualfeegrp', 'value'),
     Input('ogcredrange', 'value'),
     # State('ogcredrange', 'value')
-    prevent_initial_call=True
+    # prevent_initial_call=True
     
 )
-def return1and2(v, fs, b, c, s, a, afg, oclr):
+def submit_df_on_click(clicks, v, fs, b, c, s, a, afg, oclr):
     if 'submit-btn' == ctx.triggered_id:
         submit_df = df.loc[(df['Vintage'] == v)
                         & (df['FirstSecond'] == fs)
@@ -136,12 +143,20 @@ def return1and2(v, fs, b, c, s, a, afg, oclr):
                         & (df['AnnualFeeGroup'] == afg)
                         & (df['OriginalCreditLineRange'] == oclr)]
         
-        return  html.Div(children=[dash_table.DataTable(
-    data=submit_df.to_dict('records'),
-    columns=[{'id': c, 'name': c} for c in submit_df.columns],
-    page_size=10,
-     style_table={'overflowX': 'auto'},
-)])
+        return dash_table.DataTable(
+            data=submit_df.to_dict('records'),
+            columns=[{'id': c, 'name': c} for c in submit_df.columns],
+            page_size=10,
+            style_table={'overflowX': 'auto'})
+    else:
+        return     dash_table.DataTable(
+        data=df.to_dict('records'),
+        columns=[{'id': c, 'name': c} for c in df.columns],
+        page_size=10,
+        style_table={'overflowX': 'auto'},
+    ),
+        
+
     
     
 if __name__ == '__main__':

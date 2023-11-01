@@ -16,8 +16,18 @@ body {
   padding: 20px;
   background-color: #d9d9d9;
   height: 100vh;
-  display: inline-block;
+
   position: fixed;
+}
+
+.sidebar-contents {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: stretch;
+  align-content: space-around;
+  height: 65vh;
 }
 
 .vintage {
@@ -31,8 +41,14 @@ body {
   margin: auto;
 }
 
+.main-dd {
+  padding: 15px 0px 20px;
+}
+
 select {
   width: 100%;
+  padding: 5px;
+  margin: 5px;
 }
 
 button {
@@ -40,6 +56,7 @@ button {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #fff;
+  margin-top: 15px;
 }
 
 button:hover {
