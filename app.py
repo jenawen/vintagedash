@@ -1,6 +1,6 @@
 # Run this app with `python app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
-from dash import Dash, html, dcc, Input, Output, callback, dash_table
+from dash import Dash, html, dcc, Input, Output, callback, dash_table, State,ctx
 import plotly.express as px
 import pandas as pd
 import numpy as np
@@ -54,19 +54,19 @@ html.Div(className = "sidebar", children=[
     html.Label(children='Selected Vintages:'),
     dcc.Dropdown(id="selected-vintages", options=[], value=[]),
     html.Label(children='First Second'),
-    dcc.Dropdown(options=clist1, id='first-second'),
+    dcc.Dropdown(id='first-second', options=clist1, ),
     html.Label(children='Branding'),
-    dcc.Dropdown(options=clist2),
+    dcc.Dropdown(id='branding', options=clist2),
     html.Label(children='Channel'),
-    dcc.Dropdown(options=clist3),
+    dcc.Dropdown(id='channel',options=clist3),
     html.Label(children='Source'),
-    dcc.Dropdown(options=clist4),
+    dcc.Dropdown(id='source',options=clist4),
     html.Label(children='Association'),
-    dcc.Dropdown(options=clist5),
+    dcc.Dropdown(id='association',options=clist5),
     html.Label(children='Annual Fee Group'),
-    dcc.Dropdown(options=clist6),
+    dcc.Dropdown(id='annualfeegrp',options=clist6),
     html.Label(children='Original Credit Line Range'),
-    dcc.Dropdown(options=clist7),
+    dcc.Dropdown(id='ogcredrange',options=clist7),
     html.Button('Submit', id='submit-btn', n_clicks=0)
     ]),    
 
@@ -87,6 +87,9 @@ html.Div(className = "sidebar", children=[
     page_size=10,
      style_table={'overflowX': 'auto'},
 ),
+    
+    
+    ##*CONDITIONAL RENDERING: graph values are based off Submit and Add buttons !! need to make a switch statement of some sort ??
     
     dcc.Graph(id='fig1', figure=fig1),
     dcc.Graph(id='fig2', figure=fig2),
@@ -110,10 +113,36 @@ def setSelectedVintages(vintages):
 @app.callback(
     Output('filters', 'children'),
     Input('submit-btn', 'n_clicks'),
-    Input('first-second', 'value')
+    Input('selected-vintages', 'value'),
+    Input('first-second', 'value'),
+    Input('branding', 'value'),
+    Input('channel', 'value'),
+    Input('source', 'value'),
+    Input('association', 'value'),
+    Input('annualfeegrp', 'value'),
+    Input('ogcredrange', 'value'),
+    # State('ogcredrange', 'value')
+    prevent_initial_call=True
+    
 )
-def return1and2(clicks, selected):
-    return clicks, selected
-
+def return1and2(v, fs, b, c, s, a, afg, oclr):
+    if 'submit-btn' == ctx.triggered_id:
+        submit_df = df.loc[(df['Vintage'] == v)
+                        & (df['FirstSecond'] == fs)
+                        & (df['Branding'] == b)
+                        & (df['Channel'] == c)
+                        & (df['Source'] == s)
+                        & (df['Association'] == a)
+                        & (df['AnnualFeeGroup'] == afg)
+                        & (df['OriginalCreditLineRange'] == oclr)]
+        
+        return  html.Div(children=[dash_table.DataTable(
+    data=submit_df.to_dict('records'),
+    columns=[{'id': c, 'name': c} for c in submit_df.columns],
+    page_size=10,
+     style_table={'overflowX': 'auto'},
+)])
+    
+    
 if __name__ == '__main__':
     app.run(debug=True)
