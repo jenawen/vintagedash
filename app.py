@@ -50,73 +50,63 @@ def generate_table(dataframe, max_rows=10):
 ###      MAIN APP      ###
 app.layout = html.Div(className = 'wrapper', children=[
     
-html.Div(className = "sidebar", children=[
-    
-    
-    html.Div(className="sidebar-contents", children=[
-        
-        
-    html.Label(children='Selected Vintages:'),
-    dcc.Dropdown(id="selected-vintages", options=[], value=[]),
-    html.Label(children='First Second'),
-    dcc.Dropdown(id='first-second', options=clist1, ),
-    html.Label(children='Branding'),
-    dcc.Dropdown(id='branding', options=clist2),
-    html.Label(children='Channel'),
-    dcc.Dropdown(id='channel',options=clist3),
-    html.Label(children='Source'),
-    dcc.Dropdown(id='source',options=clist4),
-    html.Label(children='Association'),
-    dcc.Dropdown(id='association',options=clist5),
-    html.Label(children='Annual Fee Group'),
-    dcc.Dropdown(id='annualfeegrp',options=clist6),
-    html.Label(children='Original Credit Line Range'),
-    dcc.Dropdown(id='ogcredrange',options=clist7),
-    html.Button('Submit', id='submit-btn', n_clicks=0)
+    html.Div(className = "sidebar", children=[
+        html.Div(className="sidebar-contents", children=[
+            html.Label(children='Selected Vintages:'),
+            dcc.Dropdown(id="selected-vintages", options=[], value=[]),
+            html.Label(children='First Second'),
+            dcc.Dropdown(id='first-second', options=clist1, ),
+            html.Label(children='Branding'),
+            dcc.Dropdown(id='branding', options=clist2),
+            html.Label(children='Channel'),
+            dcc.Dropdown(id='channel',options=clist3),
+            html.Label(children='Source'),
+            dcc.Dropdown(id='source',options=clist4),
+            html.Label(children='Association'),
+            dcc.Dropdown(id='association',options=clist5),
+            html.Label(children='Annual Fee Group'),
+            dcc.Dropdown(id='annualfeegrp',options=clist6),
+            html.Label(children='Original Credit Line Range'),
+            dcc.Dropdown(id='ogcredrange',options=clist7),
+            html.Button('Submit', id='submit-btn', n_clicks=0),
+            html.Button('Add', id='add-btn', n_clicks=0),
         ]),
     ]),    
 
     
     html.Div(className = "vintage", children=[html.H1(children='Vintage Comparison'),
-    html.Div( id="filters"),
+        html.Div(id="filters"),
+        dcc.Dropdown(
+            id='vintages',
+            options=[{'label':i, 'value':i} for i in clist],
+            multi=True,
+            value=None,
+            className='main-dd'
+        ),
     
-    dcc.Dropdown(
-        id='vintages',
-        options=[{'label':i, 'value':i} for i in clist],
-        multi=True,
-        value=None,
-        className='main-dd'
-    ),
-    
-    ##*CONDITIONAL RENDERING: graph values are based off Submit and Add buttons !! need to make a switch statement of some sort ??
-    
-    html.Div(id='df-table', children={
-        
-
-    }),
-    
-            
-
-    
-    dcc.Graph(id='fig1', figure=fig1),
-    dcc.Graph(id='fig2', figure=fig2),
-    dcc.Graph(id='fig3', figure=fig3),
-    dcc.Graph(id='fig4', figure=fig4),
-    
+        ##*CONDITIONAL RENDERING: graph values are based off Submit and Add buttons !! need to make a switch statement of some sort ??
+        html.Div(id='df-table', children={}),   
+        dcc.Graph(id='fig1', figure=fig1),
+        dcc.Graph(id='fig2', figure=fig2),
+        dcc.Graph(id='fig3', figure=fig3),
+        dcc.Graph(id='fig4', figure=fig4),
     ]),
 ])
 
 ###     CALLBACK FUNCTIONS     #
 
+
+#*cb for grabbing the values from Vintage Multiselect to use as options for Selected Vintages dropdown
 @app.callback(
     Output(component_id='selected-vintages', component_property='options'),
-    # Output(component_id='selected-vintages',component_property='value'),
     Input(component_id='vintages', component_property='value'),
     prevent_initial_call=True
 )
 def setSelectedVintages(vintages):
      return vintages
-
+ 
+ 
+#* function to grab filtered values and make new dataframe
 @app.callback(
     Output('df-table', 'children'),
     Input('submit-btn', 'n_clicks'),
@@ -130,7 +120,7 @@ def setSelectedVintages(vintages):
     Input('ogcredrange', 'value'),
     # State('ogcredrange', 'value')
     # prevent_initial_call=True
-    
+    suppress_callback_exceptions=True
 )
 def submit_df_on_click(clicks, v, fs, b, c, s, a, afg, oclr):
     if 'submit-btn' == ctx.triggered_id:
@@ -142,12 +132,11 @@ def submit_df_on_click(clicks, v, fs, b, c, s, a, afg, oclr):
                         & (df['Association'] == a)
                         & (df['AnnualFeeGroup'] == afg)
                         & (df['OriginalCreditLineRange'] == oclr)]
-        
         return dash_table.DataTable(
             data=submit_df.to_dict('records'),
             columns=[{'id': c, 'name': c} for c in submit_df.columns],
             page_size=10,
-            style_table={'overflowX': 'auto'})
+            style_table={'overflowX': 'auto'}) 
     else:
         return     dash_table.DataTable(
         data=df.to_dict('records'),
@@ -155,9 +144,33 @@ def submit_df_on_click(clicks, v, fs, b, c, s, a, afg, oclr):
         page_size=10,
         style_table={'overflowX': 'auto'},
     ),
-        
 
-    
-    
+#* cb for add button, grab filters and make new df, concat with existing df        
+# @app.callback(Output('df-table', 'children'), 
+#             Input('add-btn', 'n_clicks'),
+#             Input('df-table', 'children'),
+#             Input('selected-vintages', 'value'),
+#             Input('first-second', 'value'),
+#             Input('branding', 'value'),
+#             Input('channel', 'value'),
+#             Input('source', 'value'),
+#             Input('association', 'value'),
+#             Input('annualfeegrp', 'value'),
+#             Input('ogcredrange', 'value'), 
+#             prevent_initial_call=True)
+# def add_df_on_click(clicks, table, v, fs, b, c, s, a, afg, oclr):
+#     if 'add-btn' == ctx.triggered_id:
+#         new_df = df.loc[(df['Vintage'] == v)
+#                         & (df['FirstSecond'] == fs)
+#                         & (df['Branding'] == b)
+#                         & (df['Channel'] == c)
+#                         & (df['Source'] == s)
+#                         & (df['Association'] == a)
+#                         & (df['AnnualFeeGroup'] == afg)
+#                         & (df['OriginalCreditLineRange'] == oclr)]
+#     # add_df = pd.concat(table, new_df)
+#     return html.Div(table)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
