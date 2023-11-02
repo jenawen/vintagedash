@@ -1,5 +1,5 @@
-body {
-  font-family: sans-serif;
+* {
+  font-family: Open-sans;
 }
 
 .wrapper {
@@ -14,7 +14,7 @@ body {
 .sidebar {
   width: 20%;
   padding: 20px;
-  background-color: #d9d9d9;
+  background-color: #f1f1f1;
   height: 100vh;
 
   position: fixed;
@@ -28,6 +28,7 @@ body {
   align-items: stretch;
   align-content: space-around;
   height: 65vh;
+  padding: 20px 5px;
 }
 
 .vintage {
@@ -52,14 +53,26 @@ select {
 }
 
 button {
-  font-size: 18px;
+  font-size: 15px;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 20px;
   border: 1px solid #fff;
   margin-top: 15px;
+  background-color: #0a5ec0;
+  color: white;
 }
 
 button:hover {
-  background-color: pink;
+  background-color: #0e4594;
   cursor: pointer;
+}
+
+button:disabled {
+  background-color: lightgrey;
+  cursor: not-allowed;
+}
+
+@font-face {
+  font-family: "Open-sans";
+  src: url("./fonts/OpenSans-VariableFont_wdth\,wght.ttf") format("truetype");
 }

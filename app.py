@@ -24,15 +24,7 @@ clist6 = df['AnnualFeeGroup'].unique()
 clist7 = df['OriginalCreditLineRange'].unique()
 
 ###     figures and graphs     ###
-fig1 = px.line(df.melt(id_vars="Vintage"), x=df['MonthsOnBooks'], y=df['ActiveAccountIndicator'], color=df['Vintage'],
-                    markers=True, title='Active Accounts', labels={'y': 'Active Accounts', 'x': 'Months on Book', "color": "Vintage"})
-fig2 = px.line(df.melt(id_vars="Vintage"), x=df['MonthsOnBooks'], y=df['CumlROAAnnualized'], color=df['Vintage'],
-                    markers=True, title='Cumulative ROA Annualized', labels={'y': 'ROAAnnualized', 'x': 'Months on Book', "color": "Vintage"})
-fig2.update_layout(yaxis_ticksuffix=".3%") 
-fig3 = px.line(df.melt(id_vars="Vintage"), x=df['MonthsOnBooks'], y=df['CumlPreTaxIncome'], color=df['Vintage'],
-                    markers=True, title='Cumulative PreTax Income', labels={'y': 'PreTaxIncome', 'x': 'Months on Book', "color": "Vintage"})
-fig4 = px.line(df.melt(id_vars="Vintage"), x=df['MonthsOnBooks'], y=df['EndingReceivable'], color=df['Vintage'],
-                    markers=True, title='Ending Receivable', labels={'y': 'EndingReceivable', 'x': 'Months on Book', "color": "Vintage"})
+
 
 ###     making table from default dataframe     ###
 def generate_table(dataframe, max_rows=10):
@@ -69,7 +61,8 @@ app.layout = html.Div(className = 'wrapper', children=[
             html.Label(children='Original Credit Line Range'),
             dcc.Dropdown(id='ogcredrange',options=clist7),
             html.Button('Submit', id='submit-btn', n_clicks=0),
-            html.Button('Add', id='add-btn', n_clicks=0),
+            html.Button('Add Vintage', id='add-btn', n_clicks=0, disabled=True),
+            html.Button('Reset Vintages', id='reset-btn', n_clicks=0),
         ]),
     ]),    
 
@@ -86,10 +79,7 @@ app.layout = html.Div(className = 'wrapper', children=[
     
         ##*CONDITIONAL RENDERING: graph values are based off Submit and Add buttons !! need to make a switch statement of some sort ??
         html.Div(id='df-table', children={}),   
-        dcc.Graph(id='fig1', figure=fig1),
-        dcc.Graph(id='fig2', figure=fig2),
-        dcc.Graph(id='fig3', figure=fig3),
-        dcc.Graph(id='fig4', figure=fig4),
+     
     ]),
 ])
 
@@ -109,6 +99,7 @@ def setSelectedVintages(vintages):
 #* function to grab filtered values and make new dataframe
 @app.callback(
     Output('df-table', 'children'),
+    Output('add-btn', 'disabled'),
     Input('submit-btn', 'n_clicks'),
     Input('selected-vintages', 'value'),
     Input('first-second', 'value'),
@@ -120,7 +111,7 @@ def setSelectedVintages(vintages):
     Input('ogcredrange', 'value'),
     # State('ogcredrange', 'value')
     # prevent_initial_call=True
-    suppress_callback_exceptions=True
+  
 )
 def submit_df_on_click(clicks, v, fs, b, c, s, a, afg, oclr):
     if 'submit-btn' == ctx.triggered_id:
@@ -132,18 +123,53 @@ def submit_df_on_click(clicks, v, fs, b, c, s, a, afg, oclr):
                         & (df['Association'] == a)
                         & (df['AnnualFeeGroup'] == afg)
                         & (df['OriginalCreditLineRange'] == oclr)]
-        return dash_table.DataTable(
+    
+        fig1 = px.line(submit_df.melt(id_vars="Vintage"), x=submit_df['MonthsOnBooks'], y=submit_df['ActiveAccountIndicator'], color=submit_df['Vintage'],
+                    markers=True, title='Active Accounts', labels={'y': 'Active Accounts', 'x': 'Months on Book', "color": "Vintage"})
+        fig2 = px.line(submit_df.melt(id_vars="Vintage"), x=submit_df['MonthsOnBooks'], y=submit_df['CumlROAAnnualized'], color=submit_df['Vintage'],
+                    markers=True, title='Cumulative ROA Annualized', labels={'y': 'ROAAnnualized', 'x': 'Months on Book', "color": "Vintage"})
+        fig2.update_layout(yaxis_ticksuffix=".3%") 
+        fig3 = px.line(submit_df.melt(id_vars="Vintage"), x=submit_df['MonthsOnBooks'], y=submit_df['CumlPreTaxIncome'], color=submit_df['Vintage'],
+                    markers=True, title='Cumulative PreTax Income', labels={'y': 'PreTaxIncome', 'x': 'Months on Book', "color": "Vintage"})
+        fig4 = px.line(submit_df.melt(id_vars="Vintage"), x=submit_df['MonthsOnBooks'], y=submit_df['EndingReceivable'], color=submit_df['Vintage'],
+                    markers=True, title='Ending Receivable', labels={'y': 'EndingReceivable', 'x': 'Months on Book', "color": "Vintage"})
+        return html.Div([
+            dash_table.DataTable(
             data=submit_df.to_dict('records'),
             columns=[{'id': c, 'name': c} for c in submit_df.columns],
             page_size=10,
-            style_table={'overflowX': 'auto'}) 
+            style_table={'overflowX': 'auto'}) ,
+            
+            dcc.Graph(id='fig1', figure=fig1 ),
+            dcc.Graph(id='fig2', figure=fig2),
+            dcc.Graph(id='fig3', figure=fig3),
+            dcc.Graph(id='fig4', figure=fig4)
+        ]), False
     else:
-        return     dash_table.DataTable(
-        data=df.to_dict('records'),
-        columns=[{'id': c, 'name': c} for c in df.columns],
-        page_size=10,
-        style_table={'overflowX': 'auto'},
-    ),
+        
+        fig1 = px.line(df.melt(id_vars="Vintage"), x=df['MonthsOnBooks'], y=df['ActiveAccountIndicator'], color=df['Vintage'],
+                    markers=True, title='Active Accounts', labels={'y': 'Active Accounts', 'x': 'Months on Book', "color": "Vintage"})
+        fig2 = px.line(df.melt(id_vars="Vintage"), x=df['MonthsOnBooks'], y=df['CumlROAAnnualized'], color=df['Vintage'],
+                    markers=True, title='Cumulative ROA Annualized', labels={'y': 'ROAAnnualized', 'x': 'Months on Book', "color": "Vintage"})
+        fig2.update_layout(yaxis_ticksuffix=".3%") 
+        fig3 = px.line(df.melt(id_vars="Vintage"), x=df['MonthsOnBooks'], y=df['CumlPreTaxIncome'], color=df['Vintage'],
+                    markers=True, title='Cumulative PreTax Income', labels={'y': 'PreTaxIncome', 'x': 'Months on Book', "color": "Vintage"})
+        fig4 = px.line(df.melt(id_vars="Vintage"), x=df['MonthsOnBooks'], y=df['EndingReceivable'], color=df['Vintage'],
+                    markers=True, title='Ending Receivable', labels={'y': 'EndingReceivable', 'x': 'Months on Book', "color": "Vintage"})
+        
+        return html.Div([
+            dash_table.DataTable(
+            data=df.to_dict('records'),
+            columns=[{'id': c, 'name': c} for c in df.columns],
+            page_size=10,
+            style_table={'overflowX': 'auto'}) ,
+            
+            dcc.Graph(id='fig1', figure=fig1 ),
+            dcc.Graph(id='fig2', figure=fig2),
+            dcc.Graph(id='fig3', figure=fig3),
+            dcc.Graph(id='fig4', figure=fig4)
+        ]), True
+    
 
 #* cb for add button, grab filters and make new df, concat with existing df        
 # @app.callback(Output('df-table', 'children'), 
