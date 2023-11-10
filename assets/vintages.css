@@ -43,7 +43,7 @@
 }
 
 .main-dd {
-  padding: 15px 0px 20px;
+  padding: 0px 0px 20px;
 }
 
 select {
@@ -75,4 +75,8 @@ button:disabled {
 @font-face {
   font-family: "Open-sans";
   src: url("./fonts/OpenSans-VariableFont_wdth\,wght.ttf") format("truetype");
+}
+
+h1 {
+  font-weight: 500;
 }

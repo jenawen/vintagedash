@@ -1,0 +1,238 @@
+.stButton > button {
+  width: 100%;
+  background-color: #0a5ec0;
+  color: white;
+  border: 1px solid #fff;
+  border-radius: 20px;
+}
+.stButton > button:hover {
+  background-color: #0e4594;
+  color: white;
+  border: 1px solid #0e4594;
+}
+[data-testid="stDecoration"] {
+  background-image: linear-gradient(
+    90deg,
+    rgb(26, 117, 209),
+    rgb(206, 230, 255)
+  );
+}
+[data-testid="stForm"] {
+  border-color: #f0f2f6;
+}
+
+#root
+  > div:nth-child(1)
+  > div.withScreencast
+  > div
+  > div
+  > div
+  > section.css-vk3wp9.eczjsme11
+  > div.css-6qob1r.eczjsme3
+  > div.css-10oheav.eczjsme4
+  > div
+  > div:nth-child(1)
+  > div
+  > div.css-r421ms.e10yg2by1
+  > div:nth-child(1)
+  > div
+  > div
+  > div.css-keje6w.e1f1d6gn1
+  > div:nth-child(1)
+  > div
+  > div
+  > div
+  > div
+  > button {
+  background-color: white;
+  border: 1px solid #0e4594;
+  color: #0e4594;
+}
+
+#root
+  > div:nth-child(1)
+  > div.withScreencast
+  > div
+  > div
+  > div
+  > section.css-1o14730.eczjsme11
+  > div.css-6qob1r.eczjsme3
+  > div.css-10oheav.eczjsme4
+  > div
+  > div:nth-child(1)
+  > div
+  > div.css-r421ms.e10yg2by1
+  > div:nth-child(1)
+  > div
+  > div
+  > div.css-keje6w.e1f1d6gn1
+  > div:nth-child(1)
+  > div
+  > div
+  > div
+  > div
+  > button:hover {
+  background-color: #f1f1f1;
+  border: 1px solid #0e4594;
+  color: #0e4594;
+}
+
+#root
+  > div:nth-child(1)
+  > div.withScreencast
+  > div
+  > div
+  > div
+  > section.main.css-uf99v8.ea3mdgi5
+  > div.block-container.css-1y4p8pa.ea3mdgi4
+  > div:nth-child(1)
+  > div
+  > div.css-434r0z.e1f1d6gn3
+  > div.css-rop4aa.e1f1d6gn1
+  > div:nth-child(1)
+  > div
+  > div:nth-child(1)
+  > div
+  > button {
+  background-color: #0e4594;
+}
+
+#root
+  > div:nth-child(1)
+  > div.withScreencast
+  > div
+  > div
+  > div
+  > section.main.css-uf99v8.ea3mdgi5
+  > div.block-container.css-1y4p8pa.ea3mdgi4
+  > div:nth-child(1)
+  > div
+  > div.css-434r0z.e1f1d6gn3
+  > div.css-rop4aa.e1f1d6gn1
+  > div:nth-child(1)
+  > div
+  > div:nth-child(2)
+  > div
+  > button {
+  background-color: #83c9ff;
+}
+
+#root
+  > div:nth-child(1)
+  > div.withScreencast
+  > div
+  > div
+  > div
+  > section.main.css-uf99v8.ea3mdgi5
+  > div.block-container.css-1y4p8pa.ea3mdgi4
+  > div:nth-child(1)
+  > div
+  > div.css-434r0z.e1f1d6gn3
+  > div.css-rop4aa.e1f1d6gn1
+  > div:nth-child(1)
+  > div
+  > div:nth-child(3)
+  > div
+  > button {
+  background-color: #ff2b2b;
+}
+
+#root
+  > div:nth-child(1)
+  > div.withScreencast
+  > div
+  > div
+  > div
+  > section.main.css-uf99v8.ea3mdgi5
+  > div.block-container.css-1y4p8pa.ea3mdgi4
+  > div:nth-child(1)
+  > div
+  > div.css-434r0z.e1f1d6gn3
+  > div.css-rop4aa.e1f1d6gn1
+  > div:nth-child(1)
+  > div
+  > div:nth-child(4)
+  > div
+  > button {
+  background-color: #ffabab;
+}
+
+#root
+  > div:nth-child(1)
+  > div.withScreencast
+  > div
+  > div
+  > div
+  > section.main.css-uf99v8.ea3mdgi5
+  > div.block-container.css-1y4p8pa.ea3mdgi4
+  > div:nth-child(1)
+  > div
+  > div.css-434r0z.e1f1d6gn3
+  > div.css-rop4aa.e1f1d6gn1
+  > div:nth-child(1)
+  > div
+  > div:nth-child(5)
+  > div
+  > button {
+  background-color: #29b09d;
+}
+
+#root
+  > div:nth-child(1)
+  > div.withScreencast
+  > div
+  > div
+  > div
+  > section.main.css-uf99v8.ea3mdgi5
+  > div.block-container.css-1y4p8pa.ea3mdgi4
+  > div:nth-child(1)
+  > div
+  > div.css-434r0z.e1f1d6gn3
+  > div.css-rop4aa.e1f1d6gn1
+  > div:nth-child(1)
+  > div
+  > div:nth-child(6)
+  > div
+  > button {
+  background-color: #7defa1;
+}
+
+#root
+  > div:nth-child(1)
+  > div.withScreencast
+  > div
+  > div
+  > div
+  > section.main.css-uf99v8.ea3mdgi5
+  > div.block-container.css-1y4p8pa.ea3mdgi4
+  > div:nth-child(1)
+  > div
+  > div.css-434r0z.e1f1d6gn3
+  > div.css-rop4aa.e1f1d6gn1
+  > div:nth-child(1)
+  > div
+  > div:nth-child(7)
+  > div
+  > button {
+  background-color: #ff8700;
+}
+
+#root
+  > div:nth-child(1)
+  > div.withScreencast
+  > div
+  > div
+  > div
+  > section.main.css-uf99v8.ea3mdgi5
+  > div.block-container.css-1y4p8pa.ea3mdgi4
+  > div:nth-child(1)
+  > div
+  > div.css-434r0z.e1f1d6gn3
+  > div.css-rop4aa.e1f1d6gn1
+  > div:nth-child(1)
+  > div
+  > div:nth-child(8)
+  > div
+  > button {
+  background-color: #ffd16a;
+}

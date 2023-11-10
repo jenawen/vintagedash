@@ -4,6 +4,7 @@ from dash import Dash, html, dcc, Input, Output, callback, dash_table, State,ctx
 import plotly.express as px
 import pandas as pd
 import numpy as np
+import json
 
 app = Dash(__name__)
 
@@ -43,6 +44,7 @@ def generate_table(dataframe, max_rows=10):
 app.layout = html.Div(className = 'wrapper', children=[
     
     html.Div(className = "sidebar", children=[
+            html.Div(children='Filters'),
         html.Div(className="sidebar-contents", children=[
             html.Label(children='Selected Vintages:'),
             dcc.Dropdown(id="selected-vintages", options=[], value=[]),
@@ -79,7 +81,7 @@ app.layout = html.Div(className = 'wrapper', children=[
     
         ##*CONDITIONAL RENDERING: graph values are based off Submit and Add buttons !! need to make a switch statement of some sort ??
         html.Div(id='df-table', children={}),   
-     
+        html.Div(id='df-table-test', children={}),   
     ]),
 ])
 
@@ -101,14 +103,14 @@ def setSelectedVintages(vintages):
     Output('df-table', 'children'),
     Output('add-btn', 'disabled'),
     Input('submit-btn', 'n_clicks'),
-    Input('selected-vintages', 'value'),
-    Input('first-second', 'value'),
-    Input('branding', 'value'),
-    Input('channel', 'value'),
-    Input('source', 'value'),
-    Input('association', 'value'),
-    Input('annualfeegrp', 'value'),
-    Input('ogcredrange', 'value'),
+    State('selected-vintages', 'value'),
+    State('first-second', 'value'),
+    State('branding', 'value'),
+    State('channel', 'value'),
+    State('source', 'value'),
+    State('association', 'value'),
+    State('annualfeegrp', 'value'),
+    State('ogcredrange', 'value'),
     # State('ogcredrange', 'value')
     # prevent_initial_call=True
   
@@ -171,31 +173,32 @@ def submit_df_on_click(clicks, v, fs, b, c, s, a, afg, oclr):
         ]), True
     
 
-#* cb for add button, grab filters and make new df, concat with existing df        
-# @app.callback(Output('df-table', 'children'), 
-#             Input('add-btn', 'n_clicks'),
-#             Input('df-table', 'children'),
-#             Input('selected-vintages', 'value'),
-#             Input('first-second', 'value'),
-#             Input('branding', 'value'),
-#             Input('channel', 'value'),
-#             Input('source', 'value'),
-#             Input('association', 'value'),
-#             Input('annualfeegrp', 'value'),
-#             Input('ogcredrange', 'value'), 
-#             prevent_initial_call=True)
-# def add_df_on_click(clicks, table, v, fs, b, c, s, a, afg, oclr):
-#     if 'add-btn' == ctx.triggered_id:
-#         new_df = df.loc[(df['Vintage'] == v)
-#                         & (df['FirstSecond'] == fs)
-#                         & (df['Branding'] == b)
-#                         & (df['Channel'] == c)
-#                         & (df['Source'] == s)
-#                         & (df['Association'] == a)
-#                         & (df['AnnualFeeGroup'] == afg)
-#                         & (df['OriginalCreditLineRange'] == oclr)]
-#     # add_df = pd.concat(table, new_df)
-#     return html.Div(table)
+#* cb for add button, grab filters and make new df, concat with existing df, display     
+@app.callback(Output('df-table-test', 'children'), 
+            Input('add-btn', 'n_clicks'),
+            Input('df-table', 'children'),
+            State('selected-vintages', 'value'),
+            State('first-second', 'value'),
+            State('branding', 'value'),
+            State('channel', 'value'),
+            State('source', 'value'),
+            State('association', 'value'),
+            State('annualfeegrp', 'value'),
+            State('ogcredrange', 'value'), 
+            prevent_initial_call=True)
+def add_df_on_click(clicks, table, v, fs, b, c, s, a, afg, oclr):
+    if 'add-btn' == ctx.triggered_id:
+        new_df = df.loc[(df['Vintage'] == v)
+                        & (df['FirstSecond'] == fs)
+                        & (df['Branding'] == b)
+                        & (df['Channel'] == c)
+                        & (df['Source'] == s)
+                        & (df['Association'] == a)
+                        & (df['AnnualFeeGroup'] == afg)
+                        & (df['OriginalCreditLineRange'] == oclr)]
+        # add_df = pd.concat(table, new_df)
+        print(json.dumps(table), "hIhihihi")
+    return html.Div("hello")
 
 
 if __name__ == '__main__':
